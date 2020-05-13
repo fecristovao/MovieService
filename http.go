@@ -109,8 +109,9 @@ func ListTorrents(ip string) (error, []Torrent) {
 
 	var torrents []Torrent
 	for _, line := range lines {
-		items := strings.Split(re.ReplaceAllString(line, "\t"), "\t")[1:]
-		torrent := Torrent{items[0], items[1], items[2], items[3], items[4], items[5], items[6], items[7], strings.Join(items[8:],"")}
+        items := strings.Split(re.ReplaceAllString(line, "\t"), "\t")[1:]
+        id := strings.ReplaceAll(items[0], "*", "")
+		torrent := Torrent{id, items[1], items[2], items[3], items[4], items[5], items[6], items[7], strings.Join(items[8:],"")}
 		torrents = append(torrents, torrent)
 	}
 
@@ -190,6 +191,10 @@ func setServices() map[string]m.Crawler {
 }
 
 func listServices(w http.ResponseWriter, r *http.Request) {
+    // Set Header for Options
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Headers", "*")
+
     fmt.Printf("[%s] - Requested listServices\n", time.Now().Format("2006-01-02 15:04:05"))
     var listServices []string
     for key, _ := range allServices {
@@ -201,6 +206,7 @@ func listServices(w http.ResponseWriter, r *http.Request) {
 func searchMovie(w http.ResponseWriter, r *http.Request) {
     // Set Header for Options
     w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Headers", "*")
     
     // If is a option method, terminate function
     if r.Method == http.MethodOptions {
@@ -258,6 +264,7 @@ func searchMovie(w http.ResponseWriter, r *http.Request) {
 func getMagnetLinks(w http.ResponseWriter, r *http.Request) {
     // Set Header for Options
     w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Headers", "*")
 
     // If is a option method, terminate function
     if r.Method == http.MethodOptions {
@@ -290,6 +297,10 @@ func getMagnetLinks(w http.ResponseWriter, r *http.Request) {
 }
 
 func listAllTorrents(w http.ResponseWriter, r *http.Request) {
+    // Set Header for Options
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Headers", "*")
+
     fmt.Printf("[%s] - Requested listAllTorrents\n", time.Now().Format("2006-01-02 15:04:05"))
     err, list := ListTorrents(torrentIP)
     if err != nil {
@@ -303,6 +314,7 @@ func listAllTorrents(w http.ResponseWriter, r *http.Request) {
 func addMagnetLink(w http.ResponseWriter, r *http.Request) {
     // Set Header for Options
     w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Headers", "*")
     
     // If is a option method, terminate function
     if r.Method == http.MethodOptions {
@@ -331,6 +343,10 @@ func addMagnetLink(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteTorrent(w http.ResponseWriter, r *http.Request) {
+    // Set Header for Options
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Headers", "*")
+
     params := mux.Vars(r)
     id := params["id"]
     result := DeleteTorrent(torrentIP, id)
@@ -344,6 +360,10 @@ func deleteTorrent(w http.ResponseWriter, r *http.Request) {
 }
 
 func resumeTorrent(w http.ResponseWriter, r *http.Request) {
+    // Set Header for Options
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Headers", "*")
+
     params := mux.Vars(r)
     id := params["id"]
     result := ResumeTorrent(torrentIP, id)
@@ -357,6 +377,11 @@ func resumeTorrent(w http.ResponseWriter, r *http.Request) {
 }
 
 func pauseTorrent(w http.ResponseWriter, r *http.Request) {
+    // Set Header for Options
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Headers", "*")
+    
+
     params := mux.Vars(r)
     id := params["id"]
     result := StopTorrent(torrentIP, id)
