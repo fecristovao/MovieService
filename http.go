@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	m "moviescrawler"
+	m "github.com/log22/MoviesCrawler"
     "reflect"
     "net/http"
     "log"
@@ -413,7 +413,7 @@ func main() {
     api.HandleFunc("/pauseTorrent/{id}", pauseTorrent).Methods("GET")
 
     // SPA route
-    spa := spaHandler{staticPath: "/mnt/c/teste/dist/spa", indexPath: "index.html"}
+    spa := spaHandler{staticPath: "./spa", indexPath: "index.html"}
     r.PathPrefix("/").Handler(spa)
     
     // Set CORS
