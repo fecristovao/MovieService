@@ -41,7 +41,7 @@ type RequestAddDownload struct {
 }
 
 var allServices map[string]m.Crawler
-var torrentIP = "192.168.0.9"
+var torrentIP = "192.168.0.108"
 
 // spaHandler implements the http.Handler interface, so we can use it
 // to respond to HTTP requests. The path to the static directory and
@@ -92,7 +92,7 @@ type Torrent struct {
 }
 
 func ListTorrents(ip string) (error, []Torrent) {
-	out, err := exec.Command("/usr/bin/transmission-remote", ip,"-l").Output()
+    out, err := exec.Command("/usr/bin/transmission-remote", ip,"-l").Output()
 	if err != nil {
 		log.Fatal(err)
 		return errors.New("Error"), nil
@@ -395,7 +395,13 @@ func pauseTorrent(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    
+    ip, _ := exec.Command("hostname", "-I").Output()
+    ipF := strings.ReplaceAll(string(ip), "\n", "")
+    ipF = strings.ReplaceAll(ipF, "\t", "")
+    ips := strings.Split(ipF, " ")
+    torrentIP = ips[0]
+
+    fmt.Printf("IP: %s\n", torrentIP)
     allServices = setServices()
     r := mux.NewRouter()
     
